@@ -1,21 +1,29 @@
-import dotnet from "dotnet";
-dotnet.config({ quite: true });
-import express, { json } from "express";
-import { connectDB } from "./config/databse";
-import router from "./routers/auth-router";
+import dotenv from "dotenv";
+dotenv.config({ quiet: true });
+
+import express from "express";
+import userRouter from "./routers/auth-router.js";
+import { connectDB } from "./config/databse.js";
 
 const app = express();
-const PORT = process.env.PORT_URL || 3000;
-connectDB();
+const PORT = process.env.PORT || 3000;
+
+
 
 //! middileware  
-app.use()
-app.use("/v1/api", router);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+//! Database 
+connectDB();
+
+
+app.use("/v1/api", userRouter);
 
 
 
 app.listen(PORT, (err) => {
     if (err)
         console.log(err);
-    console.log("Server Start on port", PORT);
-})
+    console.log("Server start successfully 🚀");
+});

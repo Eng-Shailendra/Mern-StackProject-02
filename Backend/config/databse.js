@@ -1,9 +1,9 @@
-import mongooes from "mongooes";
+import mongoose from "mongoose";
 
 export async function connectDB() {
     try {
-        await mongooes.connect(process.env.DTATBSE_URL)
-        console.log("Data base connecte seccessfully");
+        await mongoose.connect(process.env.DATABASE_URL);
+        console.log("Data base connecte seccessfully ✔");
     } catch (err) {
         console.log(err);
     }
