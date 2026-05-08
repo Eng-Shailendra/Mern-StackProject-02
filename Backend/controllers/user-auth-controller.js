@@ -1,5 +1,7 @@
 import { User } from "../models/user-model.js";
 import bcrypt from 'bcrypt'
+import jwt from "jsonwebtoken"
+import { sendMail } from "../config/send-mail.js";
 
 export async function regesterUser(req, res) {
     try {
@@ -28,10 +30,18 @@ export async function regesterUser(req, res) {
             password: newPassword
 
         });
-        await newUser.save();
+
 
         // create token
-        const token = 
+        const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY, { expiresIn: "5m" });
+        newUser.token = token;
+        await newUser.save();
+
+        // have to send Email  
+        sendMail(email, token)
+
+
+
 
         res.status(200).json({
             success: true,
