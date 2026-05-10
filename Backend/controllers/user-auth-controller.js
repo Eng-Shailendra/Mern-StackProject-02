@@ -3,9 +3,8 @@ import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken"
 import { sendMail } from "../config/send-mail.js";
 import { Session } from "../models/session-model.js";
-import { use } from "react";
 
-export async function regesterUser(req, res) {
+export async function registerUser(req, res) {
     try {
         const { username, email, password } = req.body;
         if (!username || !email || !password) {
@@ -56,6 +55,39 @@ export async function regesterUser(req, res) {
     }
 }
 
+export const emailVarification = async (req, res) => {
+    try {
+        const bearer = req.headers.authorization;
+        
+        if (!bearer || !email) {
+            return res.status(400).json({
+                success: false,
+                message: "Details are not valid"
+            });
+        };
+        const token = bearer.split(" ")[1];
+        const verify = jwt.verify(token, process.env.SECRET_KEY);
+        if (!verify) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid token"
+            });
+        }
+        user.isVerified = true;
+        await user.save();
+        res.status(200).json({
+            success: true,
+            message: "Thank for verification, now you can login"
+        })
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Internal error"
+        })
+    }
+}
 
 export async function loginUser(req, res) {
 
@@ -67,21 +99,21 @@ export async function loginUser(req, res) {
                 message: "Both field are requreired",
             })
         }
-        const user = await User.findOne({ email });
-        if (!user) {
+        const userData = await User.findOne({ email });
+        if (!userData) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid email",
             })
         }
-        const matchpassword = await bcrypt.compare(userExist.password, password);
+        const matchpassword = await bcrypt.compare(password, userData.password);
         if (!matchpassword) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid password",
             })
         }
-        if (!user.isVerified) {
+        if (!userData.isVerified) {
             return res.status(400).json({
                 success: false,
                 message: " cheack email for verification ",
@@ -89,16 +121,16 @@ export async function loginUser(req, res) {
         }
 
         // Create session 
-        const existingSession = await Session.findOne({ userId: user._id });
+        const existingSession = await Session.findOne({ userId: userData._id });
         if (existingSession) {
-            await Session.deleteOne({ userId: user._id });
+            await Session.deleteOne({ userId: userData._id });
         }
-        await Session.create({ userId: user._id });
+        await Session.create({ userId: userData._id });
 
         // Access token
-        const accessToken = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: "10d" });
+        const accessToken = jwt.sign({ id: userData._id }, process.env.SECRET_KEY, { expiresIn: "10d" });
         // Refersh token
-        const refershToken = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: "20d" });
+        const refershToken = jwt.sign({ id: userData._id }, process.env.SECRET_KEY, { expiresIn: "20d" });
 
         user.isLogin = true;
         await user.save();
@@ -108,18 +140,15 @@ export async function loginUser(req, res) {
             accessToken,
             refershToken,
             user: {
-                username: user.username,
-            }
-        })
-
-
-
-
-
-
-
+                username: userData.username,
+            },
+        });
     } catch (err) {
 
         console.log(err);
+        res.status(500).json({
+            success: false,
+            message: "Internal error "
+        })
     }
 }
