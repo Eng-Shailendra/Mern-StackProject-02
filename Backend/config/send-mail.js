@@ -12,7 +12,6 @@ export const sendMail = async (email, token) => {
     const template = handlebars.compile(emailTemplateSource);
     const htmlTOSend = template({ token: encodeURIComponent(token) })
 
-
     const transport = nodemailer.createTransport({
         service: "gmail",
         auth: {
