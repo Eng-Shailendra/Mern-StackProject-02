@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "node:os";
 
 const userSchema = mongoose.Schema({
     username: {
@@ -26,7 +27,12 @@ const userSchema = mongoose.Schema({
         type: String,
         default: null
     },
-    otpExprire: {
+    otp: {
+        type: String,
+        default: null
+
+    },
+    otpExpire: {
         type: Date,
         default: null
     },
