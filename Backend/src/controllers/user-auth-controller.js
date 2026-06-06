@@ -37,7 +37,7 @@ export async function registerUser(req, res) {
 
 
         // create token
-        const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY, { expiresIn: "5m" });
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "5m" });
         newUser.token = token;
         await newUser.save();
 
@@ -77,7 +77,7 @@ export const emailVarification = async (req, res) => {
             });
         }
         const token = bearer.split(" ")[1];
-        const verify = jwt.verify(token, process.env.SECRET_KEY);
+        const verify = jwt.verify(token, process.env.JWT_SECRET_KEY);
         if (!verify) {
             return res.status(400).json({
                 success: false,
@@ -101,7 +101,6 @@ export const emailVarification = async (req, res) => {
 }
 
 export async function loginUser(req, res) {
-
     try {
         const { email, password } = req.body;
         if (!email || !password) {
@@ -139,9 +138,9 @@ export async function loginUser(req, res) {
         await Session.create({ userId: userData._id });
 
         // Access token
-        const accessToken = jwt.sign({ id: userData._id }, process.env.SECRET_KEY, { expiresIn: "10d" });
+        const accessToken = jwt.sign({ id: userData._id }, process.env.JWT_SECRET_KEY, { expiresIn: "10d" });
         // Refersh token
-        const refershToken = jwt.sign({ id: userData._id }, process.env.SECRET_KEY, { expiresIn: "20d" });
+        const refershToken = jwt.sign({ id: userData._id }, process.env.JWT_SECRET_KEY, { expiresIn: "20d" });
 
         userData.isLogin = true;
         await userData.save();
@@ -163,7 +162,6 @@ export async function loginUser(req, res) {
         })
     }
 }
-
 
 // forgot password;
 export const forgotPassword = async (req, res) => {
@@ -203,7 +201,6 @@ export const forgotPassword = async (req, res) => {
     }
 
 }
-
 
 export const verifyOtp = async (req, res) => {
     try {

@@ -1,24 +1,18 @@
 import dotenv from "dotenv";
 dotenv.config({ quiet: true });
-
-import express from "express";
-import userRouter from "./routers/auth-router.js";
-import { connectDB } from "./config/databse.js";
-
-const app = express();
-const PORT = process.env.PORT || 3000;
+import { connectDB } from "./src/config/databse.js";
+import app from "./src/app.js";
+import dns from 'node:dns'
 
 
+const PORT = process.env.PORT || 8080;
 
-//! middileware  
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
+dns.setServers([
+    "1.1.1.1",
+    "8.8.8.8"
+])
 //! Database 
 connectDB();
-
-
-app.use("/v1/api", userRouter);
 
 
 
