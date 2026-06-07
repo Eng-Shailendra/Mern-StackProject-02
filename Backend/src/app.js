@@ -3,6 +3,8 @@ import cors from "cors"
 import userRouter from "./routers/auth-router.js";
 import productRouter from "./routers/product-router.js"
 import orderRouter from "./routers/order-router.js"
+import paymentRouter from "./routers/payment-route.js"
+import analyticsRouter from "./routers/analytics-router.js"
 
 const app = express();
 
@@ -21,6 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/v1/api", userRouter);
 app.use("/v1/api/product", productRouter);
-app.use("/v1/api/order/", orderRouter);
+app.use("/v1/api/order", orderRouter);
+app.use("/v1/api/payment", paymentRouter);
+app.use("/v1/api/analytics", analyticsRouter);
 
 export default app

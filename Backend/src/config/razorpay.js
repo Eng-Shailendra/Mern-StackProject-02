@@ -1,5 +1,4 @@
 import Razorpay from "razorpay";
-import products from "razorpay/dist/types/products";
 
 const paymentInstance = new Razorpay({
     key_id: process.env.RZP_API_KEY,

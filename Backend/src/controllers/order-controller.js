@@ -104,7 +104,7 @@ export const getMyorderById = async (req, res) => {
     }
 };
 
-export const updateOrderStatus = async (req, res) => {
+export const    updateOrderStatus = async (req, res) => {
     try {
         const { id } = req.params;
         const { status } = req.body;
