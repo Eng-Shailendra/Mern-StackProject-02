@@ -1,0 +1,131 @@
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <title>Order Confirmation</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f4f4f4;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        text-align: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .header h2 {
+        color: #333;
+        margin: 0;
+      }
+
+      .order-summary {
+        margin: 20px 0;
+      }
+
+      .order-summary p {
+        margin: 6px 0;
+        color: #555;
+      }
+
+      .items {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      .items th,
+      .items td {
+        padding: 12px;
+        border: 1px solid #e6e6e6;
+        text-align: left;
+      }
+
+      .items th {
+        background-color: #f7f7f7;
+        color: #333;
+      }
+
+      .totals {
+        margin-top: 20px;
+        text-align: right;
+      }
+
+      .totals p {
+        margin: 4px 0;
+        color: #333;
+        font-weight: 600;
+      }
+
+      .footer {
+        font-size: 13px;
+        color: #999;
+        text-align: center;
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <h2>Order Confirmed</h2>
+        <p>Hello {{customerName}},</p>
+        <p>Thank you for shopping with us!</p>
+      </div>
+
+      <div class="order-summary">
+        <p><strong>Order ID:</strong> {{orderId}}</p>
+        <p><strong>Order Date:</strong> {{orderDate}}</p>
+        <p><strong>Delivery Address:</strong> {{deliveryAddress}}</p>
+      </div>
+
+      <table class="items">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each items}}
+            <tr>
+              <td>{{name}}</td>
+              <td>{{quantity}}</td>
+              <td>{{price}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+      <div class="totals">
+        {{#if subtotal}}
+          <p>Subtotal: {{subtotal}}</p>
+        {{/if}}
+        {{#if shipping}}
+          <p>Shipping: {{shipping}}</p>
+        {{/if}}
+        <p>Total: {{total}}</p>
+      </div>
+
+      <div class="footer">
+        <p>If you have any questions, please contact us at {{supportEmail}}.</p>
+        <p>&copy; 2026 Your Shop. All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+
+</html>

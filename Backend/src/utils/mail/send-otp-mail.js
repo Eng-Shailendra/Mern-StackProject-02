@@ -1,15 +1,9 @@
 import nodemailer from "nodemailer";
+import { mailTransport } from "../../config/mailTransport.js";
 
 export async function sendOtpMail(email, otp) {
-    const transport = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.MAIL_USER,
-            pass: process.env.MAIL_PASSWORD
-        }
-    })
     try {
-        await transport.sendMail({
+        await mailTransport.sendMail({
             from: process.env.MAIL_USER,
             to: email,
             subject: "Verify mail",

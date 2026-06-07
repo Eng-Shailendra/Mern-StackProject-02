@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import handlebars from "handlebars"
-import nodemailer from "nodemailer"
+import { mailTransport } from "../../config/mailTransport.js";
 
 
-export const sendMail = async (email, token) => {
+export const verifyMail = async (email, token) => {
 
     const filePath = path.join(import.meta.dirname, "template.hbs");
     const emailTemplateSource = fs.readFileSync(filePath, "utf-8");
@@ -12,15 +12,8 @@ export const sendMail = async (email, token) => {
     const template = handlebars.compile(emailTemplateSource);
     const htmlTOSend = template({ token: encodeURIComponent(token) })
 
-    const transport = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: process.env.MAIL_USER,
-            pass: process.env.MAIL_PASSWORD
-        }
-    });
     try {
-        await transport.sendMail({
+        await mailTransport.sendMail({
             from: process.env.MAIL_USER,
             to: email,
             subject: "Verify mail",

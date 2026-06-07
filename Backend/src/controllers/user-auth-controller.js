@@ -1,11 +1,11 @@
 import { User } from "../models/user-model.js";
 import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken"
-import { sendMail } from "../config/send-mail.js";
+import { verifyMail } from "../utils/mail/verify-mail.js";
 import { Session } from "../models/session-model.js";
 import { json } from "node:stream/consumers";
 import { verify } from "node:crypto";
-import { sendOtpMail } from "../config/send-otp-mail.js";
+import { sendOtpMail } from "../utils/mail/send-otp-mail.js";
 
 export async function registerUser(req, res) {
     try {
