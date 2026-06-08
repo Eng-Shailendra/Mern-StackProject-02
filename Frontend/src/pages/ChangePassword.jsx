@@ -1,6 +1,6 @@
 import { use, useState } from "react";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
-import { api } from "../Config/axiosInstance";
+import { api } from "../axiosInstance";
 import { data, Navigate, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 

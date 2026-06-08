@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { api } from "../Config/axiosInstance";
+import { api } from "../axiosInstance";
 import toast from "react-hot-toast";
 
 const ForgotPassword = () => {
-
   let [email, setEmail] = useState(null);
   const navigate = useNavigate();
 
@@ -18,7 +17,6 @@ const ForgotPassword = () => {
     } catch (err) {
       console.log(err);
     }
-    
   };
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-gray-100 flex items-center justify-center p-4">

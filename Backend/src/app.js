@@ -5,6 +5,7 @@ import productRouter from "./routers/product-router.js"
 import orderRouter from "./routers/order-router.js"
 import paymentRouter from "./routers/payment-route.js"
 import analyticsRouter from "./routers/analytics-router.js"
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(cors({
     origin: process.env.FRONTEND_PATH_URL,
     credentials: true
 }))
+app.use(cookieParser())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

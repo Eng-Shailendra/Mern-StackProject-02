@@ -3,16 +3,18 @@ import jwt from 'jsonwebtoken'
 
 export const isLogin = async (req, res, next) => {
     try {
-        const token = req.headers.authorization;
+        const token = req.cookies.token;
         if (!token) {
             return res.status(400).json({
                 success: false,
                 message: "Token is not avliabel"
             })
         }
-        const bearerToken = token.split(' ')[1];
-        const decoded = jwt.verify(bearerToken, process.env.JWT_SECRET_KEY);
-        req.user = await User.findById(decoded.id).select("-password");
+        // const bearerToken = token.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        user = await User.findById(decoded.id).select("-password");
+        sessionStorage.setItem("user", user)
+        req.user;
         next();
     } catch (err) {
         console.log(err)

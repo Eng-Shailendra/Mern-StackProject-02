@@ -1,44 +1,22 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-import { api } from "../Config/axiosInstance";
-import { getUser } from "../Context/UserContext";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import useAuth from "../Featrus/hook/useAuth";
 
 const LoginPage = () => {
   const [logindata, setLogindata] = useState({
     email: "",
     password: "",
   });
-
+  const { loginUser } = useAuth();
   const navigate = useNavigate();
-  let { setUser } = getUser();
 
   const handlechanges = (e) => {
     let { name, value } = e.target;
     setLogindata({ ...logindata, [e.target.name]: e.target.value });
   };
   const handleLogin = async () => {
-    try {
-      const resp = await api.post("/login", logindata);
-      // console.log(resp.data);
-      let userData = {
-        ...resp.data.user,
-        accessToken: resp.data.accessToken,
-        refereshToken: resp.data.refereshToken,
-      };
-      setUser(userData);
-      localStorage.setItem("userData", JSON.stringify(userData));
-
-      if (resp.data.success) {
-        navigate("/");
-        toast.success(resp.data.message);
-      }
-      sessionStorage.setItem("username", resp.data.user.name);
-    } catch (err) {
-      console.log(err);
-      toast.error(err.message);
-    }
+    await loginUser(logindata);
+    navigate("/");
   };
 
   return (

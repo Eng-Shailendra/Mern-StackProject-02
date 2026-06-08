@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import OtpInput from "react-otp-input";
-import { api } from "../Config/axiosInstance";
+import { api } from "../axiosInstance";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 

@@ -1,11 +1,11 @@
 import { User } from "../models/user-model.js";
 import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken"
-import { verifyMail } from "../utils/mail/verify-mail.js";
 import { Session } from "../models/session-model.js";
 import { json } from "node:stream/consumers";
-import { verify } from "node:crypto";
 import { sendOtpMail } from "../utils/mail/send-otp-mail.js";
+import { sendToVerifyEmail } from "../utils/mail/send-to-Verify-Mail.js";
+import { asyncWrapProviders } from "node:async_hooks";
 
 export async function registerUser(req, res) {
     try {
@@ -24,7 +24,6 @@ export async function registerUser(req, res) {
                 message: "User is already registerde 👍"
             });
         };
-
         //! Password  Hashing
         const salt = await bcrypt.genSalt(13);
         const newPassword = await bcrypt.hash(password, salt);
@@ -34,16 +33,12 @@ export async function registerUser(req, res) {
             password: newPassword
 
         });
-
-
         // create token
-        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "5m" });
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
         newUser.token = token;
         await newUser.save();
-
         // have to send Email  
-        sendMail(email, token)
-
+        sendToVerifyEmail(email, token)
         res.status(200).json({
             success: true,
             message: "User registered successfully cheack your mail",
@@ -58,47 +53,52 @@ export async function registerUser(req, res) {
     }
 }
 
-export const emailVarification = async (req, res) => {
-    try {
-        const bearer = req.headers.authorization;
-        let { email } = req.body;
 
-        if (!bearer || !email) {
+export const emailVerification = async (req, res) => {
+    try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer")) {
             return res.status(400).json({
                 success: false,
-                message: "Details are not valid"
+                message: "Token is missing"
+            })
+        }
+
+        const token = authHeader.split(" ")[1]
+        let decodedInfo
+        try {
+            decodedInfo = jwt.verify(token, process.env.JWT_SECRET_KEY)
+
+        } catch (err) {
+            return res.status(400).json({
+                success: false,
+                message: "Token expired",
             });
-        };
-        const user = await User.findOne({ email });
+        }
+        const user = await User.findById(decodedInfo.id)
         if (!user) {
             return res.status(400).json({
                 success: false,
-                message: "User not found"
-            });
-        }
-        const token = bearer.split(" ")[1];
-        const verify = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        if (!verify) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid token"
-            });
+                message: "User is not found"
+            })
         }
         user.isVerified = true;
+        user.token = null;
         await user.save();
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
-            message: "Thank for verification, now you can login"
-        })
-
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({
-            success: false,
-            message: "Internal error"
+            message: "Email verified successfully"
         })
     }
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Somethig wrong"
+        });
+    }
 }
+
 
 export async function loginUser(req, res) {
     try {
@@ -129,7 +129,6 @@ export async function loginUser(req, res) {
                 message: " cheack email for verification ",
             });
         }
-
         // Create session 
         const existingSession = await Session.findOne({ userId: userData._id });
         if (existingSession) {
@@ -141,20 +140,23 @@ export async function loginUser(req, res) {
         const accessToken = jwt.sign({ id: userData._id }, process.env.JWT_SECRET_KEY, { expiresIn: "10d" });
         // Refersh token
         const refershToken = jwt.sign({ id: userData._id }, process.env.JWT_SECRET_KEY, { expiresIn: "20d" });
-
         userData.isLogin = true;
         await userData.save();
-        return res.status(200).json({
+        return res.cookie("token", accessToken, {
+            httpOnly: true, secure: false, sameSite: "strict",
+            maxAge: 24 * 60 * 60 * 1000,
+        }).status(200).json({
             success: true,
             message: `wellcom ${userData.username}`,
             accessToken,
             refershToken,
             user: {
-                username: userData.username,
+                id: userData._id,
+                name: userData.username,
+                email: userData.email
             },
         });
     } catch (err) {
-
         console.log(err);
         res.status(500).json({
             success: false,
@@ -206,7 +208,6 @@ export const verifyOtp = async (req, res) => {
     try {
         const { email } = req.params;
         const { otp } = req.body;
-        console.log(req.params);
         if (!email || !otp) {
             return res.status(400).json({
                 success: false,
@@ -284,4 +285,21 @@ export const updatePassword = async (req, res) => {
             message: "Internal error "
         })
     }
+}
+
+
+export const LogoutUser = async (req, res) => {
+    const token = req.cookies.token;
+
+    await Session.deleteOne({ userId: req.user._id })
+    const user = await User.findById({ _id: req.user._id })
+    user.isLogin = false;
+    await user.save();
+    sessionStorage.clear();
+    res.clearCookie("token")
+        .status(200).json({
+            success: true,
+            message: "Logged out successfully",
+        });
+
 }

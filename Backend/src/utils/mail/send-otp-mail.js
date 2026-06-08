@@ -3,7 +3,7 @@ import { mailTransport } from "../../config/mailTransport.js";
 
 export async function sendOtpMail(email, otp) {
     try {
-        await mailTransport.sendMail({
+        await mailTransport().sendMail({
             from: process.env.MAIL_USER,
             to: email,
             subject: "Verify mail",

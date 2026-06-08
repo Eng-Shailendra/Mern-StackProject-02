@@ -1,9 +1,8 @@
 import React from "react";
-import { getUser } from "../Context/UserContext";
 import { Navigate } from "react-router-dom";
-
+import useAuth from "../Featrus/hook/useAuth.js";
 const ProtectedRoute = ({ children }) => {
-  const { user } = getUser();
+  const { user } = useAuth();
 
   return user ? children : <Navigate to={"/login"}></Navigate>;
 };
