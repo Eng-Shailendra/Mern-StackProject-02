@@ -9,8 +9,8 @@ import { asyncWrapProviders } from "node:async_hooks";
 
 export async function registerUser(req, res) {
     try {
-        const { username, email, password } = req.body;
-        if (!username || !email || !password) {
+        const { fullname, email, password } = req.body;
+        if (!fullname || !email || !password) {
             return res.status(500).json({
                 success: false,
                 message: "Invalid inpute fields"
@@ -28,13 +28,13 @@ export async function registerUser(req, res) {
         const salt = await bcrypt.genSalt(13);
         const newPassword = await bcrypt.hash(password, salt);
         const newUser = new User({
-            username,
+            fullname,
             email,
             password: newPassword
 
         });
         // create token
-        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
         newUser.token = token;
         await newUser.save();
         // have to send Email  
@@ -68,7 +68,7 @@ export const emailVerification = async (req, res) => {
         const token = authHeader.split(" ")[1]
         let decodedInfo
         try {
-            decodedInfo = jwt.verify(token, process.env.JWT_SECRET_KEY)
+            decodedInfo = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
         } catch (err) {
             return res.status(400).json({
@@ -113,7 +113,7 @@ export async function loginUser(req, res) {
         if (!userData) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid email",
+                message: "Invalid email ",
             })
         }
         const matchpassword = await bcrypt.compare(password, userData.password);
@@ -137,25 +137,33 @@ export async function loginUser(req, res) {
         await Session.create({ userId: userData._id });
 
         // Access token
-        const accessToken = jwt.sign({ id: userData._id }, process.env.JWT_SECRET_KEY, { expiresIn: "10d" });
+        const accessToken = jwt.sign({ id: userData._id }, process.env.JWT_SECRET_KEY, { expiresIn: "5d" });
         // Refersh token
-        const refershToken = jwt.sign({ id: userData._id }, process.env.JWT_SECRET_KEY, { expiresIn: "20d" });
+        const refreshToken = jwt.sign({ id: userData._id }, process.env.JWT_SECRET_KEY, { expiresIn: "10d" });
         userData.isLogin = true;
+        userData.token = refreshToken;
         await userData.save();
-        return res.cookie("token", accessToken, {
-            httpOnly: true, secure: false, sameSite: "strict",
-            maxAge: 24 * 60 * 60 * 1000,
-        }).status(200).json({
-            success: true,
-            message: `wellcom ${userData.username}`,
-            accessToken,
-            refershToken,
-            user: {
-                id: userData._id,
-                name: userData.username,
-                email: userData.email
-            },
-        });
+
+        return res.cookie("accessToken", accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 5 * 24 * 60 * 60 * 1000 // 5 day
+        }).cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict",
+                maxAge: 10 * 24 * 60 * 60 * 1000 // 10 day
+            })
+            .status(200).json({
+                success: true,
+                message: `wellcom ${userData.fullname}`,
+                user: {
+                    id: userData._id,
+                    name: userData.fullname,
+                    email: userData.email
+                },
+            });
     } catch (err) {
         console.log(err);
         res.status(500).json({

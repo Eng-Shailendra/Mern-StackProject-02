@@ -9,6 +9,10 @@ import Verify from "../pages/Verify";
 import ForgotPassword from "../pages/ForgotPassword";
 import ChangePassword from "../pages/ChangePassword";
 import ProductPage from "../Product/pages/ProductPage";
+import ShopPage from "../Product/pages/ShopPage";
+import CartPage from "../Product/pages/CartPage";
+import ProfilePage from "../pages/ProfilePage";
+import AboutusPage from "../pages/AboutusPage";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -18,7 +22,24 @@ const Router = () => {
       children: [
         {
           index: true,
+
           element: <ProductPage />,
+        },
+        {
+          path: "/shop",
+          element: <ShopPage />,
+        },
+        {
+          path: "/cart",
+          element: <CartPage />,
+        },
+        {
+          path: "/profile",
+          element: <ProfilePage />,
+        },
+        {
+          path: "aboutus",
+          element: <AboutusPage />,
         },
       ],
     },

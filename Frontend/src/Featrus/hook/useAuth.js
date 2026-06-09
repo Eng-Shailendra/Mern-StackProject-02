@@ -15,15 +15,17 @@ const useAuth = () => {
     const { user, setUser } = useContext(UserContext);
     const { loading, setLoading, error, setError } = useContext(LoadingAndErrorContext);
 
-    const registerUser = async ({ username, email, password }) => {
+    const registerUser = async ({ fullname, email, password }) => {
         try {
             setLoading(true);
-            const resp = await registerUserApi({ username, email, password });
-            setUser(resp.data);
+            const resp = await registerUserApi({ fullname, email, password });
             toast(resp.data.message);
             return resp.data.success;
         } catch (err) {
             console.log(err);
+            toast.error(
+                err.response?.data?.message || "Login failed"
+            );
             setError(err);
         } finally {
             setLoading(false);
@@ -34,11 +36,18 @@ const useAuth = () => {
         try {
             setLoading(true);
             const resp = await loginUserApi({ email, password });
-            setUser(resp.data);
+            setUser(resp.data.user);
+            localStorage.setItem(
+                "user",
+                JSON.stringify(resp.data.user)
+            );
             toast(resp.data.message);
             return resp.data.success;
         } catch (err) {
             console.log(err);
+            toast.error(
+                err.response?.data?.message || "Login failed"
+            );
             setError(err);
         } finally {
             setLoading(false);
@@ -101,6 +110,11 @@ const useAuth = () => {
         }
     };
 
+    const logoutUser = () => {
+        setUser(null);
+        localStorage.removeItem("user");
+    };
+
     return {
         registerUser,
         loginUser,
@@ -108,6 +122,7 @@ const useAuth = () => {
         sendOtp,
         verifyOtp,
         updatePassword,
+        logoutUser,
         user,
         loading,
         error,

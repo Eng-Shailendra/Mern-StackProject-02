@@ -6,49 +6,38 @@ import toast from "react-hot-toast";
 import useAuth from "../Featrus/hook/useAuth";
 
 const Navbar = () => {
-  const { user } = useAuth();
+  const { user, logoutUser } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
-  const accessToken = user?.accessToken;
   const navigate = useNavigate();
 
   const links = [
     { label: "Shop", to: "/shop", icon: ShoppingBag },
     { label: "Cart", to: "/cart", icon: ShoppingCart },
-    { label: "Profile", to: "/profile", icon: User },
+    { label: "Aboutus", to: "/aboutus", icon: User },
   ];
 
-  const handleLogout = async () => {
-    try {
-      if (!accessToken) return;
-      const resp = await api.post(
-        "/logout",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        },
-      );
-      if (resp.data.success) {
-        setUser(null);
-        localStorage.removeItem("userData");
-        navigate("/login");
-        toast.success(resp.data.message);
-      }
-    } catch (err) {
-      toast.error(err?.message || "Logout failed");
-    }
+  const handlelogoClick = () => {
+    navigate("/");
   };
 
-  const initial = user?.username?.charAt(0).toUpperCase() || "U";
+  const handleLogout = async () => {
+    logoutUser();
+  };
+
+  const initial = user?.name?.split(" ")[0]?.charAt(0).toUpperCase() || "U";
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md">
       <div className="flex items-center justify-between px-4 py-4 max-w-7xl mx-auto">
         {/* Nav Logo */}
         <div id="logo" className="flex items-center gap-3">
-          <span className="text-2xl font-bold text-blue-600">LOGO</span>
+          <span
+            onClick={handlelogoClick}
+            className="text-2xl font-bold text-blue-600"
+          >
+            LOGO
+          </span>
           <span className="text-sm text-gray-400 hidden sm:inline">
             Your store, your way
           </span>
@@ -104,7 +93,8 @@ const Navbar = () => {
                   className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   onClick={handleLogout}
                 >
-                  <LogOut size={16} /> Logout
+                  <LogOut size={16} />{" "}
+                  <button onClick={handleLogout}>Logout</button>
                 </button>
               </div>
             )}

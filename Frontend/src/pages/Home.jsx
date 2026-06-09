@@ -1,6 +1,5 @@
 import React from "react";
 import Navbar from "../Component/Navbar";
-import Hero from "../Component/Hero";
 import Frooter from "../Component/Frooter";
 import { Outlet } from "react-router-dom";
 import ProtectedRoute from "../Component/ProtectedRoute";
@@ -11,10 +10,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      {!user && <Hero />}
-      <ProtectedRoute>
-        <Outlet />
-      </ProtectedRoute>
+      <Outlet />
       <Frooter />
     </>
   );

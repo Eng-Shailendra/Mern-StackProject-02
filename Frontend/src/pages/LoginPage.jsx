@@ -15,8 +15,7 @@ const LoginPage = () => {
     setLogindata({ ...logindata, [e.target.name]: e.target.value });
   };
   const handleLogin = async () => {
-    await loginUser(logindata);
-    navigate("/");
+    loginUser(logindata) && navigate("/");
   };
 
   return (

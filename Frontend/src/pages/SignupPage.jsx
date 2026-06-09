@@ -2,31 +2,25 @@ import React, { useState } from "react";
 import { api } from "../axiosInstance";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../Featrus/hook/useAuth";
 
 const SignupPage = () => {
   const [formdata, setFormdata] = useState({
-    username: "",
+    fullname: "",
     email: "",
     password: "",
   });
+  const { registerUser } = useAuth();
 
   const handelChange = (e) => {
     setFormdata({ ...formdata, [e.target.name]: e.target.value });
   };
-
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const resp = await api.post("/register", formdata);
-      console.log(resp);
-      if (resp.data.success) {
-        navigate("/verify-email");
-        toast.success(resp.data.message);
-      }
-    } catch (err) {
-      toast.error(err.response.data.message);
-    }
+    console.log(formdata);
+    registerUser(formdata) && navigate("/login");
   };
   return (
     <>
@@ -37,14 +31,14 @@ const SignupPage = () => {
             <p className="font-light">Create your account</p>
           </div>
           <div className="gap-5 p-10 ">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="fullname">Fullname</label>
             <input
               className="inputfield"
               type="text"
-              name="username"
-              placeholder="Enter your user name"
-              id="username"
-              value={formdata.username}
+              name="fullname"
+              placeholder="Enter your fullname"
+              id="fullname"
+              value={formdata.fullname}
               onChange={handelChange}
             />
             <label htmlFor="email">Email</label>

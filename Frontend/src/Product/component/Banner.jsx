@@ -13,7 +13,7 @@ const Banner = ({
       <div
         className="relative h-[60vh] md:h-[70vh] lg:h-[75vh] w-full bg-cover bg-center flex items-center"
         style={{ backgroundImage: `url(${image})` }}
-        aria-label="Promotional banner"
+        aria-label="Promotional banner rotate-1.75rem "
       >
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>
 
@@ -46,7 +46,7 @@ const Banner = ({
           <div className="w-full md:w-1/2 flex justify-center md:justify-end">
             <div className="hidden md:block w-72 sm:w-96 lg:w-[420px] rounded-2xl overflow-hidden shadow-2xl">
               <img
-                src={image}
+                src={"Public/assets/Banner.png"}
                 alt="Banner preview"
                 className="w-full h-full object-cover transform hover:scale-105 transition"
               />

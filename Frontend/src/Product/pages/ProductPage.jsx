@@ -1,118 +1,85 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { Grid3X3 } from "lucide-react";
+
 import Banner from "../component/Banner";
 import ProductCard from "../component/ProductCard";
+import useProduct from "../../Featrus/hook/useProduct.js";
+import { productContext } from "../../Featrus/Context/ProductContext";
+import LoadingOverlay from "../../Component/LodingOverlay.jsx";
+import SearchComponet from "../component/Searchcomponent.jsx";
+import ProductFeaturedComponent from "../component/ProductFeaturedComponent.jsx";
+import { useNavigate } from "react-router-dom";
 
-const sampleProducts = Array.from({ length: 12 }).map((_, idx) => ({
-  id: idx + 1,
-  title: `Product ${idx + 1}`,
-  category: idx % 2 === 0 ? "Clothing" : "Accessories",
-  price: (19 + idx * 3).toFixed(2),
-  image: `https://source.unsplash.com/collection/1163637/800x600?sig=${idx}`,
-}));
-
-const categories = [
-  "All",
-  "Clothing",
-  "Accessories",
-  "Electronics",
-  "Home",
-  "Sale",
-];
+const categories = ["All", "POPULAR"];
 
 const ProductPage = () => {
-  const [query, setQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All");
+  const { loading, getProduct } = useProduct();
+  const { product } = useContext(productContext);
 
-  const filtered = sampleProducts.filter((p) => {
-    const matchesQuery = p.title.toLowerCase().includes(query.toLowerCase());
-    const matchesCategory =
-      activeCategory === "All" || p.category === activeCategory;
-    return matchesQuery && matchesCategory;
-  });
+  const [activeCategory, setActiveCategory] = useState("All");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getProduct();
+  }, []);
+
+  const handleStore = () => {
+    navigate("/shop");
+  };
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {/* Sidebar */}
-        <aside className="hidden md:block md:col-span-1">
-          <div className="bg-white rounded-lg shadow p-4 sticky top-6">
-            <h2 className="text-lg font-semibold mb-4">Categories</h2>
-            <ul className="space-y-2">
-              {categories.map((cat) => (
-                <li key={cat}>
-                  <button
-                    onClick={() => setActiveCategory(cat)}
-                    className={`w-full text-left px-3 py-2 rounded-md hover:bg-gray-100 transition ${
-                      activeCategory === cat ? "bg-blue-50 font-semibold" : ""
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </aside>
+    <main className="min-h-screen bg-gray-50">
+      {loading && <LoadingOverlay />}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Mobile Category */}
+        <div className="md:hidden mb-6">
+          <select className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"></select>
+        </div>
 
-        {/* Main content */}
-        <section className="md:col-span-3 space-y-6">
-          {/* Search + Filters */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex items-center gap-3 w-full sm:w-2/3">
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search products..."
-                className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-              />
-              <button className="px-4 py-2 bg-gray-100 rounded-md">
-                Filter
-              </button>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 ">
+          {/* Content */}
+          <section className="md:col-span-4 md:row-span-4 space-y-8">
+            {/* Banner */}
+            <div className="overflow-hidden rounded-3xl shadow-lg">
+              <Banner image={"Public/assets/Banner.png"} />
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="text-sm text-gray-600">
-                Showing {filtered.length} results
+            {/* Featured Products */}
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-5">
+                Featured Products
+              </h2>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                {/* {filtered.slice(0, 8).map((item) => (
+                  <ProductFeaturedComponent key={item._id || item.id} product={item} />
+                ))} */}
               </div>
-              <select className="px-3 py-2 border rounded-md">
-                <option>Sort: Popular</option>
-                <option>Sort: Newest</option>
-                <option>Sort: Price low→high</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Banner / Carousel */}
-          <div>
-            <Banner
-              image={"https://source.unsplash.com/1600x900/?store,shopping"}
-            />
-          </div>
-
-          {/* Featured / product list grid */}
-          <div>
-            <h3 className="text-xl font-semibold mb-4">Featured Products</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {filtered.slice(0, 8).map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-          </div>
-
-          {/* All products section */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold">All Products</h3>
-              <button className="text-sm text-blue-600">View More</button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {sampleProducts.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
+            {/* All Products */}
+            <div>
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  All Products
+                </h2>
+
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                  {/* {filtered.slice(0, 8).map((item) => (
+                  <ProductCard key={item._id || item.id} product={item} />
+                ))} */}
+                </div>
+
+                <button
+                  onClick={handleStore}
+                  className="text-blue-600 font-medium hover:text-blue-700"
+                >
+                  View More
+                </button>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </main>
   );

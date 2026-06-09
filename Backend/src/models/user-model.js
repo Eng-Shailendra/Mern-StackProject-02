@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { type } from "node:os";
 
 const userSchema = mongoose.Schema({
-    username: {
+    fullname: {
         type: String,
         required: true,
     },
@@ -14,10 +14,6 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: true,
-    },
-    isLogin: {
-        type: Boolean,
-        default: false
     },
     isVerified: {
         type: Boolean,
@@ -32,13 +28,9 @@ const userSchema = mongoose.Schema({
         default: null
 
     },
-    otpExpire: {
-        type: Date,
-        default: null
-    },
     role: {
         type: String,
-        enum: ["admin", "user"],
+        enum: ["admin", "user" , "master"],
         default: "user"
     }
 }, { timestamp: true });

@@ -1,26 +1,46 @@
 import React from "react";
 
 const ProductCard = ({ product }) => {
+  const title = product.name || product.title || "Product";
+  const image = product.image || product.imageUrl || product.imageUrls?.[0]?.url || "https://via.placeholder.com/400";
+  const description = product.description || "Modern styling with clean details for everyday use.";
+  const rating = 4 + ((product._id?.length || product.id || 1) % 2);
+
   return (
-    <article className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition">
-      <div className="w-full h-44 bg-gray-100 flex items-center justify-center overflow-hidden">
+    <article className="group overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-2xl">
+      <div className="relative h-56 overflow-hidden bg-slate-100">
         <img
-          src={product.image}
-          alt={product.title}
-          className="w-full h-full object-cover"
+          src={image}
+          alt={title}
+          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
+        <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 shadow-sm">
+          {product.category}
+        </span>
       </div>
 
-      <div className="p-4">
-        <h3 className="text-sm font-semibold text-gray-800 truncate">
-          {product.title}
-        </h3>
-        <p className="text-xs text-gray-500 mt-1">{product.category}</p>
-        <div className="mt-3 flex items-center justify-between">
-          <div className="text-lg font-bold text-gray-900">
-            ${product.price}
+      <div className="space-y-4 p-5">
+        <div>
+          <h3 className="text-lg font-semibold text-slate-900 leading-snug">
+            {title}
+          </h3>
+          <p className="mt-2 text-sm text-slate-500">{description}</p>
+        </div>
+
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <div className="text-2xl font-bold text-slate-900">
+              ${product.price}
+            </div>
+            <div className="mt-2 flex items-center gap-1 text-sm text-amber-500">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <span key={index}>{index < rating ? "★" : "☆"}</span>
+              ))}
+              <span className="ml-2 text-slate-400">({rating}.0)</span>
+            </div>
           </div>
-          <button className="text-sm bg-blue-600 text-white px-3 py-1 rounded-md">
+
+          <button className="rounded-2xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-500">
             Add
           </button>
         </div>
