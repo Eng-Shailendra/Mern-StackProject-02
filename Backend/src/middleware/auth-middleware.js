@@ -5,22 +5,26 @@ export const isLogin = async (req, res, next) => {
     try {
         const token = req.cookies.token;
         if (!token) {
-            return res.status(400).json({
+            return res.status(401).json({
                 success: false,
-                message: "Token is not avliabel"
+                message: "Authentication token is missing"
             })
         }
-        // const bearerToken = token.split(" ")[1];
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        user = await User.findById(decoded.id).select("-password");
-        sessionStorage.setItem("user", user)
-        req.user;
+        const user = await User.findById(decoded.id).select("-password");
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+        req.user = user;
         next();
     } catch (err) {
         console.log(err)
-        return res.status(400).json({
+        return res.status(401).json({
             success: false,
-            message: "Unable to verify"
+            message: "Invalid or expired token"
         })
     }
 }

@@ -1,10 +1,21 @@
 import React from "react";
+import useProductFeature from "../featurs/productFeaturs";
+import useCartFeaturs from "../featurs/cartFeaturs";
+import { Minus, Plus } from "lucide-react";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, source }) => {
   const title = product.name || product.title || "Product";
-  const image = product.image || product.imageUrl || product.imageUrls?.[0]?.url || "https://via.placeholder.com/400";
-  const description = product.description || "Modern styling with clean details for everyday use.";
+  const image =
+    product.image ||
+    product.imageUrl ||
+    product.imageUrls?.[0]?.url ||
+    "https://via.placeholder.com/400";
+  const description =
+    product.description ||
+    "Modern styling with clean details for everyday use.";
   const rating = 4 + ((product._id?.length || product.id || 1) % 2);
+  const { handleMoreBtn } = useProductFeature();
+  const { handleAddToCart, handleRemoveToCart } = useCartFeaturs();
 
   return (
     <article className="group overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-2xl">
@@ -39,10 +50,37 @@ const ProductCard = ({ product }) => {
               <span className="ml-2 text-slate-400">({rating}.0)</span>
             </div>
           </div>
+          <div className="flex justify-between gap-1 ">
+            {source === "home" && (
+              <button
+                onClick={handleMoreBtn}
+                className="rounded-2xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-500"
+              >
+                More
+              </button>
+            )}
+            {source === "shop" && (
+              <button className="rounded-2xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-500">
+                <Minus
+                  onClick={() => {
+                    handleRemoveToCart(product);
+                  }}
+                />
+              </button>
+            )}
 
-          <button className="rounded-2xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-500">
-            Add
-          </button>
+            <button className="rounded-2xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-500">
+              {source === "shop" ? (
+                <Plus
+                  onClick={() => {
+                    handleAddToCart(product);
+                  }}
+                />
+              ) : (
+                "add"
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </article>

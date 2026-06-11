@@ -4,12 +4,14 @@ import { Menu, X, ShoppingBag, ShoppingCart, User, LogOut } from "lucide-react";
 import { api } from "../axiosInstance";
 import toast from "react-hot-toast";
 import useAuth from "../Featrus/hook/useAuth";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const { user, logoutUser } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
+  const cart = useSelector((state) => state.cart.cartItems);
 
   const links = [
     { label: "Shop", to: "/shop", icon: ShoppingBag },
@@ -59,6 +61,20 @@ const Navbar = () => {
                       }`
                     }
                   >
+                    {item.label === "Cart" && (
+                      <div className="relative flex items-center">
+                        <Icon
+                          size={22}
+                          className="shrink-0 transition-transform hover:scale-110"
+                        />
+
+                        {cart.length > 0 && (
+                          <span className="absolute -top-3 -right-4 flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-green-600 text-white text-xs font-bold shadow-md">
+                            {cart.length}
+                          </span>
+                        )}
+                      </div>
+                    )}
                     {/* <Icon size={18} className="shrink-0" /> */}
                     <span className="text-ml font-mono cursor-pointer">
                       {item.label}

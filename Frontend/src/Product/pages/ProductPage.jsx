@@ -51,9 +51,12 @@ const ProductPage = () => {
               </h2>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                {/* {filtered.slice(0, 8).map((item) => (
-                  <ProductFeaturedComponent key={item._id || item.id} product={item} />
-                ))} */}
+                {product.slice(0, 4).map((item) => (
+                  <ProductFeaturedComponent
+                    key={item._id || item.id}
+                    product={item}
+                  />
+                ))}
               </div>
             </div>
 
@@ -63,19 +66,21 @@ const ProductPage = () => {
                 <h2 className="text-2xl font-bold text-gray-900">
                   All Products
                 </h2>
-
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-                  {/* {filtered.slice(0, 8).map((item) => (
-                  <ProductCard key={item._id || item.id} product={item} />
-                ))} */}
-                </div>
-
                 <button
                   onClick={handleStore}
                   className="text-blue-600 font-medium hover:text-blue-700"
                 >
                   View More
                 </button>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                {product.slice(0, 8).map((item) => (
+                  <ProductCard
+                    key={item._id || item.id}
+                    product={item}
+                    source={"home"}
+                  />
+                ))}
               </div>
             </div>
           </section>
