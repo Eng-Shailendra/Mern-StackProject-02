@@ -1,10 +1,13 @@
 import { useDispatch } from "react-redux"
 import { addToCart, removeFromCart, clearCart } from "../redux/CartSlice"
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { Podcast } from "lucide-react";
 
 
 const useCartFeaturs = () => {
     const dispathch = useDispatch();
+    const navigate = useNavigate()
 
     const handleAddToCart = (product) => {
         const add = () => {
@@ -46,7 +49,15 @@ const useCartFeaturs = () => {
         clear()
     }
 
-    return { handleAddToCart, handleRemoveToCart, handleClearCart };
+    const hadleDubbleClick = (item) => {
+
+        const dubbleClick = () => {
+            navigate(`/product/${item._id}`);
+        }
+        dubbleClick();
+    }
+
+    return { handleAddToCart, handleRemoveToCart, handleClearCart, hadleDubbleClick };
 }
 
 export default useCartFeaturs;

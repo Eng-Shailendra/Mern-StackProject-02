@@ -68,7 +68,7 @@ export const getProductById = async (req, res) => {
                 message: "Product not found"
             })
         }
-        res.status(400).json({
+        res.status(200).json({
             success: true,
             message: "Product fetch successfully",
             data: product

@@ -23,6 +23,24 @@ const useProduct = () => {
         }
     }, [setError, setLoading, setProduct]);
 
-    return { getProduct, loading, error };
+
+    const getProductById = async (id) => {
+        try {
+            setLoading(true);
+            const res = await getProductByIdApi(id);
+            toast(res.data.message);
+            return res.data.data;
+
+        } catch (err) {
+            toast.error(
+                err.response?.data?.message || "Product Loading failed"
+            )
+            setError(err.response?.data)
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    return { getProduct, getProductById, loading, error };
 }
 export default useProduct;

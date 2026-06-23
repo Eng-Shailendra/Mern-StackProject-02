@@ -13,6 +13,8 @@ import ShopPage from "../Product/pages/ShopPage";
 import CartPage from "../Product/pages/CartPage";
 import ProfilePage from "../pages/ProfilePage";
 import AboutusPage from "../pages/AboutusPage";
+import ProductById from "../Product/pages/ProductById";
+import NotFoundPage from "../pages/NotFoundPage";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -28,6 +30,10 @@ const Router = () => {
         {
           path: "/shop",
           element: <ShopPage />,
+        },
+        {
+          path: "/product/:id",
+          element: <ProductById />,
         },
         {
           path: "/cart",
@@ -71,6 +77,10 @@ const Router = () => {
     {
       path: "/change-password/:email",
       element: <ChangePassword />,
+    },
+    {
+      path: "*",
+      element: <NotFoundPage />,
     },
   ]);
   return (

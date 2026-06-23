@@ -3,6 +3,7 @@ import { productContext } from "../../Featrus/Context/ProductContext";
 import useProduct from "../../Featrus/hook/useProduct";
 import SearchComponet from "../component/SearchComponent";
 import { Grid3X3 } from "lucide-react";
+import useCartFeaturs from "../featurs/cartFeaturs";
 
 import ProductCard from "../component/ProductCard";
 import shopFeaturs from "../featurs/shopFeaturs";
@@ -22,6 +23,8 @@ const ShopPage = () => {
     categories,
     loading,
   } = shopFeaturs();
+
+  const { hadleDubbleClick } = useCartFeaturs();
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -71,6 +74,7 @@ const ShopPage = () => {
             ) : sortedProducts.length > 0 ? (
               sortedProducts.map((item) => (
                 <ProductCard
+                  handleClick={() => hadleDubbleClick(item)}
                   key={item._id || item.id}
                   product={item}
                   source={"shop"}

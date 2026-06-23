@@ -3,7 +3,7 @@ import useProductFeature from "../featurs/productFeaturs";
 import useCartFeaturs from "../featurs/cartFeaturs";
 import { Minus, Plus } from "lucide-react";
 
-const ProductCard = ({ product, source }) => {
+const ProductCard = ({ handleClick, product, source }) => {
   const title = product.name || product.title || "Product";
   const image =
     product.image ||
@@ -23,6 +23,9 @@ const ProductCard = ({ product, source }) => {
         <img
           src={image}
           alt={title}
+          onClick={() => {
+            handleClick();
+          }}
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
         <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 shadow-sm">
