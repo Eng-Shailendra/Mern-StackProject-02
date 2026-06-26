@@ -1,15 +1,24 @@
 import React from "react";
 import { FiMail, FiPhone } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { FaTwitter, FaFacebookF, FaInstagram } from "react-icons/fa";
 
 const Frooter = () => {
+  const navigate = useNavigate();
+  const handleLogoClick = () => {
+    navigate("/");
+  };
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-2xl font-bold text-blue-600">LOGO</h3>
+            <img
+              src="/assets/logo.png"
+              className="bg-gray-50 w-50"
+              onClick={handleLogoClick}
+              alt=""
+            />
             <p className="mt-3 text-sm text-gray-600">
               Small store description. Quality products, fast shipping and
               friendly support.
