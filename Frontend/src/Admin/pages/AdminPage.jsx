@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { use, useContext, useEffect, useMemo, useState } from "react";
 import {
   Search,
   Package,
@@ -7,48 +7,65 @@ import {
   Edit,
   Trash2,
 } from "lucide-react";
+import { productContext } from "../../Featrus/Context/ProductContext";
+import useProduct from "../../Featrus/hook/useProduct";
+import { useNavigate } from "react-router-dom";
+import { useAdmin } from "../../Featrus/hook/useAdmin";
 
-const AdminProductsPage = () => {
+const dummyProducts = [
+  {
+    _id: "1",
+    name: "Eyeshadow Palette with Mirror",
+    category: "Beauty",
+    price: 799,
+    stock: 20,
+    image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9",
+    createdAt: "2026-06-20",
+  },
+  {
+    _id: "2",
+    name: "Wireless Headphones",
+    category: "Electronics",
+    price: 2499,
+    stock: 0,
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+    createdAt: "2026-06-21",
+  },
+  {
+    _id: "3",
+    name: "Smart Watch",
+    category: "Electronics",
+    price: 3999,
+    stock: 15,
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
+    createdAt: "2026-06-22",
+  },
+  {
+    _id: "4",
+    name: "Leather Backpack",
+    category: "Fashion",
+    price: 1899,
+    stock: 5,
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+    createdAt: "2026-06-23",
+  },
+];
+
+const AdminPage = () => {
   const [search, setSearch] = useState("");
+  const { getProduct } = useProduct();
+  const { product, setProduct } = useContext(productContext);
+  const navigate = useNavigate();
+  const { deleteProduct } = useAdmin();
 
-  const products = [
-    {
-      _id: "1",
-      name: "Eyeshadow Palette with Mirror",
-      category: "Beauty",
-      price: 799,
-      stock: 20,
-      image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9",
-      createdAt: "2026-06-20",
-    },
-    {
-      _id: "2",
-      name: "Wireless Headphones",
-      category: "Electronics",
-      price: 2499,
-      stock: 0,
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
-      createdAt: "2026-06-21",
-    },
-    {
-      _id: "3",
-      name: "Smart Watch",
-      category: "Electronics",
-      price: 3999,
-      stock: 15,
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
-      createdAt: "2026-06-22",
-    },
-    {
-      _id: "4",
-      name: "Leather Backpack",
-      category: "Fashion",
-      price: 1899,
-      stock: 5,
-      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
-      createdAt: "2026-06-23",
-    },
-  ];
+  useEffect(() => {
+    const getAllProduct = async () => {
+      const allproduct = await getProduct();
+    };
+    getAllProduct();
+  }, []);
+  let products;
+  product ? (products = product) : (products = dummyProducts);
 
   const filteredProducts = useMemo(() => {
     return products.filter((item) =>
@@ -59,6 +76,10 @@ const AdminProductsPage = () => {
   const totalStock = products.reduce((acc, item) => acc + item.stock, 0);
 
   const outOfStock = products.filter((item) => item.stock === 0).length;
+
+  const handleEdit = (id) => {
+    navigate(`/admin/update-product/${id}`);
+  };
 
   return (
     <section className="min-h-screen bg-gray-50 p-4 md:p-6">
@@ -72,7 +93,12 @@ const AdminProductsPage = () => {
             <p className="mt-1 text-gray-500">Manage all your products</p>
           </div>
 
-          <button className="rounded-xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:bg-gray-800">
+          <button
+            onClick={() => {
+              navigate("/admin/add-product");
+            }}
+            className="rounded-xl bg-black px-5 py-3 text-sm font-medium text-white transition hover:bg-gray-800"
+          >
             + Add Product
           </button>
         </div>
@@ -161,10 +187,11 @@ const AdminProductsPage = () => {
               <tbody>
                 {filteredProducts.map((product) => (
                   <tr key={product._id} className="border-t">
+                    {console.log(product.imageUrls[0]?.url)}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-4">
                         <img
-                          src={product.image}
+                          src={product.imageUrls[0]?.url}
                           alt={product.name}
                           className="h-16 w-16 rounded-xl object-cover"
                         />
@@ -197,11 +224,19 @@ const AdminProductsPage = () => {
 
                     <td className="px-6 py-4">
                       <div className="flex justify-center gap-3">
-                        <button className="rounded-lg bg-blue-100 p-2 text-blue-600 hover:bg-blue-200">
+                        <button
+                          onClick={() => handleEdit(product._id)}
+                          className="rounded-lg bg-blue-100 p-2 text-blue-600 hover:bg-blue-200"
+                        >
                           <Edit size={18} />
                         </button>
 
-                        <button className="rounded-lg bg-red-100 p-2 text-red-600 hover:bg-red-200">
+                        <button
+                          onClick={() => {
+                            deleteProduct(product._id);
+                          }}
+                          className="rounded-lg bg-red-100 p-2 text-red-600 hover:bg-red-200"
+                        >
                           <Trash2 size={18} />
                         </button>
                       </div>
@@ -222,7 +257,7 @@ const AdminProductsPage = () => {
             >
               <div className="flex gap-4">
                 <img
-                  src={product.image}
+                  src={product.imageUrls[0]?.url}
                   alt={product.name}
                   className="h-24 w-24 rounded-2xl object-cover"
                 />
@@ -251,11 +286,19 @@ const AdminProductsPage = () => {
               </div>
 
               <div className="mt-4 flex gap-3">
-                <button className="flex-1 rounded-xl bg-blue-100 py-2 text-blue-600">
+                <button
+                  onClick={() => handleEdit(product._id)}
+                  className="flex-1 rounded-xl bg-blue-100 py-2 text-blue-600"
+                >
                   Edit
                 </button>
 
-                <button className="flex-1 rounded-xl bg-red-100 py-2 text-red-600">
+                <button
+                  onClick={() => {
+                    deleteProduct(product._id);
+                  }}
+                  className="flex-1 rounded-xl bg-red-100 py-2 text-red-600"
+                >
                   Delete
                 </button>
               </div>
@@ -267,4 +310,4 @@ const AdminProductsPage = () => {
   );
 };
 
-export default AdminProductsPage;
+export default AdminPage;

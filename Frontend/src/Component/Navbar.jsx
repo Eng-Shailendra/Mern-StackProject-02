@@ -19,12 +19,21 @@ const Navbar = () => {
     { label: "Aboutus", to: "/aboutus", icon: User },
   ];
 
+  if (!user) {
+    links.push({ label: "Login", to: "/login" });
+  }
+
+  if (user?.role === "admin") {
+    links.push({ label: "Admin", to: "/admin" });
+  }
+
   const handlelogoClick = () => {
     navigate("/");
   };
 
   const handleLogout = async () => {
     logoutUser();
+    navigate("/login");
   };
 
   const initial = user?.name?.split(" ")[0]?.charAt(0).toUpperCase() || "U";

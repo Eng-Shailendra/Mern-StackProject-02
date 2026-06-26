@@ -12,7 +12,9 @@ const useProduct = () => {
             setLoading(true);
             const res = await getProductApi();
             setProduct(res.data.data);
+
             toast(res.data.message);
+            return res.data.data;
         } catch (err) {
             toast.error(
                 err.response?.data?.message || "Product Loading failed"

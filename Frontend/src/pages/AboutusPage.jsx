@@ -64,7 +64,7 @@ const AboutusPage = () => {
                 <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
                   {profileData.name}
                 </h1>
-                <p className="text-xl text-blue-600 font-semibold mb-2">
+                <p className="text-2xl text-black-600 font-semibold mt-2 p-5">
                   {profileData.title}
                 </p>
                 <p className="text-gray-600 max-w-2xl">{profileData.bio}</p>

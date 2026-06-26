@@ -15,6 +15,9 @@ import ProfilePage from "../pages/ProfilePage";
 import AboutusPage from "../pages/AboutusPage";
 import ProductById from "../Product/pages/ProductById";
 import NotFoundPage from "../pages/NotFoundPage";
+import AdminPage from "../Admin/pages/AdminPage";
+import CreateProductPage from "../Admin/pages/CreateProductPage";
+import UpdateProductPage from "../Admin/pages/UpdateProductPage";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -44,8 +47,20 @@ const Router = () => {
           element: <ProfilePage />,
         },
         {
-          path: "aboutus",
+          path: "/aboutus",
           element: <AboutusPage />,
+        },
+        {
+          path: "/admin",
+          element: <AdminPage />,
+        },
+        {
+          path: "/admin/add-product",
+          element: <CreateProductPage />,
+        },
+        {
+          path: "/admin/update-product/:id",
+          element: <UpdateProductPage />,
         },
       ],
     },

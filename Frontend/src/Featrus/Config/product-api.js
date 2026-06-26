@@ -5,6 +5,7 @@ const getProductApi = async () => {
     return res;
 
 }
+
 const getProductByIdApi = async (id) => {
     const res = await api.get(`/product/${id}`);
     return res;
@@ -16,7 +17,7 @@ const createProductApi = async (productData) => {
 }
 
 const updateProductApi = async (id, productData) => {
-    const res = await api.put(`product/${id}`, productData);
+    const res = await api.put(`/product/${id}`, productData);
     return res;
 }
 

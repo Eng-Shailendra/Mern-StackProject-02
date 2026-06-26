@@ -150,18 +150,19 @@ export async function loginUser(req, res) {
             sameSite: "strict",
             maxAge: 5 * 24 * 60 * 60 * 1000 // 5 day
         }).cookie("refreshToken", refreshToken, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "strict",
-                maxAge: 10 * 24 * 60 * 60 * 1000 // 10 day
-            })
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 10 * 24 * 60 * 60 * 1000 // 10 day
+        })
             .status(200).json({
                 success: true,
                 message: `wellcom ${userData.fullname}`,
                 user: {
                     id: userData._id,
                     name: userData.fullname,
-                    email: userData.email
+                    email: userData.email,
+                    role: userData.role
                 },
             });
     } catch (err) {

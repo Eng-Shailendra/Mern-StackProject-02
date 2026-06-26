@@ -1,98 +1,204 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
+import {
+  Package,
+  FileText,
+  IndianRupee,
+  Boxes,
+  Tag,
+  ImagePlus,
+} from "lucide-react";
+import { useAdmin } from "../../Featrus/hook/useAdmin";
 
 const CreateProductPage = () => {
-    const nameRef = useRef();
-    const descriptionRef = useRef();
-    const priceRef = useRef();
-    const categoryRef = useRef();
-    const stockRef = useRef();
+  const { createProduct } = useAdmin();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const [productData, setProductData] = useState({
+    name: "",
+    description: "",
+    price: "",
+    category: "",
+    stock: "",
+    image: null,
+  });
 
-        const productData = {
-            name: nameRef.current.value,
-            description: descriptionRef.current.value,
-            price: Number(priceRef.current.value),
-            category: categoryRef.current.value,
-            stock: Number(stockRef.current.value),
-        };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProductData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-        console.log(productData);
+  const handleImageChange = (e) => {
+    setProductData((prev) => ({
+      ...prev,
+      image: e.target.files[0],
+    }));
+  };
 
-        // API Call
-        // createProduct(productData)
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    return (
-        <section className="max-w-3xl mx-auto p-6">
-            <h1 className="text-3xl font-bold mb-6">
-                Create New Product
-            </h1>
+    try {
+      console.log(productData);
+      await createProduct(productData);
+      setProductData({
+        name: "",
+        description: "",
+        price: "",
+        category: "",
+        stock: "",
+        image: null,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                    <label>Product Name</label>
-                    <input
-                        ref={nameRef}
-                        type="text"
-                        className="w-full border p-3 rounded"
-                        placeholder="Product Name"
-                    />
-                </div>
+  return (
+    <section className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">
+            Create New Product
+          </h1>
+          <p className="text-gray-500 mt-2">
+            Add a new product to your store inventory.
+          </p>
+        </div>
 
-                <div>
-                    <label>Description</label>
-                    <textarea
-                        ref={descriptionRef}
-                        rows={4}
-                        className="w-full border p-3 rounded"
-                        placeholder="Description"
-                    />
-                </div>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8">
+          <div className="space-y-6">
+            {/* Product Name */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <Package size={18} />
+                Product Name
+              </label>
 
-                <div>
-                    <label>Price</label>
-                    <input
-                        ref={priceRef}
-                        type="number"
-                        className="w-full border p-3 rounded"
-                        placeholder="Price"
-                    />
-                </div>
+              <input
+                type="text"
+                name="name"
+                value={productData.name}
+                onChange={handleChange}
+                placeholder="Enter product name"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-black"
+                required
+              />
+            </div>
 
-                <div>
-                    <label>Category</label>
-                    <select
-                        ref={categoryRef}
-                        className="w-full border p-3 rounded"
-                    >
-                        <option value="">Select Category</option>
-                        <option value="beauty">Beauty</option>
-                        <option value="fashion">Fashion</option>
-                        <option value="electronics">Electronics</option>
-                    </select>
-                </div>
+            {/* Description */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <FileText size={18} />
+                Description
+              </label>
 
-                <div>
-                    <label>Stock</label>
-                    <input
-                        ref={stockRef}
-                        type="number"
-                        className="w-full border p-3 rounded"
-                        placeholder="Stock"
-                    />
-                </div>
+              <textarea
+                rows={5}
+                name="description"
+                value={productData.description}
+                onChange={handleChange}
+                placeholder="Enter product description"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 resize-none outline-none focus:ring-2 focus:ring-black"
+                required
+              />
+            </div>
 
-                <button
-                    type="submit"
-                    className="bg-black text-white px-6 py-3 rounded"
-                >
-                    Create Product
-                </button>
-            </form>
-        </section>
-    );
+            {/* Price & Stock */}
+            <div className="grid md:grid-cols-2 gap-5">
+              <div>
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                  <IndianRupee size={18} />
+                  Price
+                </label>
+
+                <input
+                  type="number"
+                  name="price"
+                  value={productData.price}
+                  onChange={handleChange}
+                  placeholder="0.00"
+                  className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-black"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                  <Boxes size={18} />
+                  Stock
+                </label>
+
+                <input
+                  type="number"
+                  name="stock"
+                  value={productData.stock}
+                  onChange={handleChange}
+                  placeholder="Available stock"
+                  className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-black"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Category */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <Tag size={18} />
+                Category
+              </label>
+
+              <select
+                name="category"
+                value={productData.category}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-black"
+                required
+              >
+                <option value="">Select Category</option>
+                <option value="beauty">Beauty</option>
+                <option value="fashion">Fashion</option>
+                <option value="electronics">Electronics</option>
+                <option value="groceries">Groceries</option>
+                <option value="furniture">Furniture</option>
+                <option value="sports">Sports</option>
+              </select>
+            </div>
+
+            {/* Image Upload */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <ImagePlus size={18} />
+                Product Image
+              </label>
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 cursor-pointer"
+                required
+              />
+
+              {productData.image && (
+                <p className="text-sm text-green-600 mt-2">
+                  Selected: {productData.image.name}
+                </p>
+              )}
+            </div>
+
+            <button
+              onClick={handleSubmit}
+              className="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-gray-800 transition"
+            >
+              Create Product
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default CreateProductPage;
