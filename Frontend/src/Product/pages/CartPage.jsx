@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { ShoppingCart } from "lucide-react";
+import useCartFeaturs from "../featurs/cartFeaturs";
 
 const CartPage = () => {
   const items = useSelector((state) => state.cart.cartItems);
@@ -9,6 +10,8 @@ const CartPage = () => {
     (acc, item) => acc + item.price * item.quantity,
     0,
   );
+
+  const { handleRemoveToCart } = useCartFeaturs();
 
   if (!items.length) {
     return (
@@ -30,7 +33,7 @@ const CartPage = () => {
 
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Cart Items */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-2 grid md:grid space-y-4">
           {items.map((item) => (
             <div
               key={item._id}
@@ -55,6 +58,16 @@ const CartPage = () => {
                       ₹{(item.price * item.quantity).toFixed(2)}
                     </span>
                   </div>
+                </div>
+                <div>
+                  <button
+                    onClick={() => {
+                      handleRemoveToCart(item);
+                    }}
+                    className="w-full mt-6 p-5 bg-gray-600 hover:bg-red-400 text-white py-3 rounded-lg font-semibold transition"
+                  >
+                    Remove
+                  </button>
                 </div>
               </div>
             </div>

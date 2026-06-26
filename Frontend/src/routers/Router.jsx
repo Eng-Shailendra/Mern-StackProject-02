@@ -32,7 +32,12 @@ const Router = () => {
         },
         {
           path: "/shop",
-          element: <ShopPage />,
+
+          element: (
+            <ProtectedRoute>
+              <ShopPage />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/product/:id",
@@ -40,11 +45,20 @@ const Router = () => {
         },
         {
           path: "/cart",
-          element: <CartPage />,
+          element: (
+            <ProtectedRoute>
+              <CartPage />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/profile",
-          element: <ProfilePage />,
+
+          element: (
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/aboutus",
@@ -52,7 +66,12 @@ const Router = () => {
         },
         {
           path: "/admin",
-          element: <AdminPage />,
+
+          element: (
+            <ProtectedRoute>
+              <AdminPage />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/admin/add-product",

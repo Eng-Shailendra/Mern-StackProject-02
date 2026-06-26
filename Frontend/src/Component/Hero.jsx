@@ -32,7 +32,7 @@ const Hero = () => {
 
             <div className="flex flex-wrap gap-4 mt-8">
               <Link
-                to="/products"
+                to="/shop"
                 className="flex items-center gap-2 bg-emerald-500 px-6 py-3 rounded-xl font-semibold hover:bg-emerald-600 transition"
               >
                 Shop Now

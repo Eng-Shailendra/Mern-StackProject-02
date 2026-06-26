@@ -6,7 +6,7 @@ const Banner = ({
   subtitle = "Quality items at unbeatable prices — curated just for you.",
   image = "/banner-default.jpg",
   ctaText = "Shop Now",
-  ctaLink = "/product",
+  ctaLink = "/shop",
 }) => {
   return (
     <section className="w-full">

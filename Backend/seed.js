@@ -7,6 +7,12 @@ import { connectDB } from "./src/config/databse.js";
 import { User } from "./src/models/user-model.js";
 import { Product } from "./src/models/product-model.js";
 import { Order } from "./src/models/order-model.js";
+import dns from "dns"
+
+dns.setServers([
+    "1.1.1.1",
+    "8.8.8.8"
+]);
 
 async function seed() {
     try {

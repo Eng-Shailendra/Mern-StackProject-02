@@ -1,6 +1,7 @@
 import React, { use, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useProduct from "../../Featrus/hook/useProduct";
+import useCartFeaturs from "../featurs/cartFeaturs";
 
 let demoProduct = {
   name: "cat",
@@ -33,6 +34,8 @@ const ProductById = () => {
     };
     getprodcut();
   }, [id]);
+
+  const { handleAddToCart } = useCartFeaturs();
 
   return (
     <div className="min-h-screen bg-gray-50 py-10">
@@ -140,6 +143,20 @@ const ProductById = () => {
                 <span>₹{totalPrice}</span>
               </div>
             </div>
+            <button
+              onClick={() =>
+                handleAddToCart({
+                  _id: id,
+                  name: demoProduct.name,
+                  price: demoProduct.price,
+                  quantity: quantity,
+                  imageUrl: demoProduct.imageUrls[0].url,
+                })
+              }
+              className="mt-8 w-full rounded-3xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+            >
+              Add to Cart now
+            </button>
             <button className="mt-8 w-full rounded-3xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
               Checkout now
             </button>

@@ -45,9 +45,9 @@ const Navbar = () => {
         <div id="logo" className="flex items-center gap-3">
           <span
             onClick={handlelogoClick}
-            className="text-2xl font-bold text-blue-600"
+            className="text-2xl font-bold text-blue-600 cursor-pointer"
           >
-            LOGO
+            <img src={"/assets/logo.png"} className=" w-22" alt="Logo " />
           </span>
           <span className="text-sm text-gray-400 hidden sm:inline">
             Your store, your way

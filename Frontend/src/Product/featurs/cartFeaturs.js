@@ -17,7 +17,7 @@ const useCartFeaturs = () => {
                     name: product.name,
                     price: product.price,
                     imageUrl: product.image || product.imageUrl || product.imageUrls?.[0]?.url,
-                    quantity: 1
+                    quantity: product.quantity || 1
                 } : null
             ));
             toast.success("Add to cart ");

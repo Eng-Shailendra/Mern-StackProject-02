@@ -21,8 +21,9 @@ const cartSlice = createSlice({
 
             if (existItem) {
                 state.cartItems = state.cartItems.map((x) =>
+
                     x._id === item._id
-                        ? { ...x, quantity: x.quantity + 1 }
+                        ? { ...x, quantity: x.quantity + item.quantity || 1 }
                         : x
                 );
             } else {
@@ -37,9 +38,12 @@ const cartSlice = createSlice({
         removeFromCart: (state, action) => {
             const item = action.payload;
 
-            state.cartItems = state.cartItems.filter(
-                (x) => x._id !== item._id
-            );
+            state.cartItems = state.cartItems.map((x) =>
+                x._id === item._id
+                    ? { ...x, quantity: x.quantity - 1 }
+                    : x
+            )
+                .filter((x) => x.quantity > 0);
 
             localStorage.setItem(
                 "cartItems",
