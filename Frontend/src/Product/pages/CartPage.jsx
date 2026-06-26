@@ -16,9 +16,9 @@ const CartPage = () => {
   if (!items.length) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center">
-        <ShoppingCart size={80} className="text-gray-300" />
+        <ShoppingCart size={80} className="text-green-600" />
         <h2 className="text-2xl font-bold mt-4">Your Cart is Empty</h2>
-        <p className="text-gray-500 mt-2">
+        <p className="text-gray-500 text-2xl mt-2">
           Add some products to continue shopping.
         </p>
       </div>

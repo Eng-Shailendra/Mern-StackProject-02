@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import useProductFeature from "../featurs/productFeaturs";
 import useCartFeaturs from "../featurs/cartFeaturs";
 import { Minus, Plus } from "lucide-react";
+import { UserContext } from "../../Featrus/Context/UserContext";
 
 const ProductCard = ({ handleClick, product, source }) => {
   const title = product.name || product.title || "Product";
@@ -16,6 +17,7 @@ const ProductCard = ({ handleClick, product, source }) => {
   const rating = 4 + ((product._id?.length || product.id || 1) % 2);
   const { handleMoreBtn } = useProductFeature();
   const { handleAddToCart, handleRemoveToCart } = useCartFeaturs();
+  const { user } = useContext(UserContext);
 
   return (
     <article className="group overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-2xl">
@@ -71,18 +73,21 @@ const ProductCard = ({ handleClick, product, source }) => {
                 />
               </button>
             )}
-
-            <button className="rounded-2xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-500">
-              {source === "shop" ? (
-                <Plus
-                  onClick={() => {
-                    handleAddToCart(product);
-                  }}
-                />
-              ) : (
-                "add"
-              )}
-            </button>
+            {user ? (
+              <button className="rounded-2xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-500">
+                {source === "shop" ? (
+                  <Plus
+                    onClick={() => {
+                      handleAddToCart(product);
+                    }}
+                  />
+                ) : (
+                  "add"
+                )}
+              </button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
