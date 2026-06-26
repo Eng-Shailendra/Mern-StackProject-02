@@ -45,12 +45,12 @@ const AboutusPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       {/* Hero Section */}
       <div className="max-w-4xl mx-auto">
         {/* Profile Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-12">
-          <div className="h-32 bg-gradient-to-r from-blue-500 to-blue-600"></div>
+          <div className="h-32 bg-gradient from-blue-500 to-blue-600"></div>
 
           <div className="px-6 sm:px-8 pb-8">
             {/* Profile Image */}
@@ -177,11 +177,11 @@ const AboutusPage = () => {
                     href={repo.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 p-6 block hover:translate-y-[-2px]"
+                    className="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 p-6 block hover:translate-y-2"
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-gray-900 mb-2 break-words">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 break-word">
                           {repo.name}
                         </h3>
                         <p className="text-gray-600 text-sm mb-4 line-clamp-2 h-10">
@@ -189,7 +189,7 @@ const AboutusPage = () => {
                         </p>
                       </div>
                       <FaBox
-                        className="text-blue-500 flex-shrink-0 ml-4"
+                        className="text-blue-500 flex shrink-0 ml-4"
                         size={24}
                       />
                     </div>

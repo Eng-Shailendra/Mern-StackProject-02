@@ -4,7 +4,7 @@ const LoadingOverlay = ({ text = "Loading...", isVisible = true }) => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-md">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/70 backdrop-blur-md">
       <div className="flex flex-col items-center gap-6">
         {/* Logo Circle */}
         <div className="relative">

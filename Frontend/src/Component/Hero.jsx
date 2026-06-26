@@ -151,7 +151,7 @@ const Hero = () => {
       {/* CTA */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="bg-gradient-to-r from-emerald-500 to-emerald-700 rounded-3xl p-12 text-center">
+          <div className="bg-gradient from-emerald-500 to-emerald-700 rounded-3xl p-12 text-center">
             <h2 className="text-4xl font-bold mb-4">
               Ready To Start Shopping?
             </h2>
