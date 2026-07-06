@@ -6,7 +6,7 @@ import ProductCard from "../component/ProductCard";
 import useProduct from "../../Featrus/hook/useProduct.js";
 import { productContext } from "../../Featrus/Context/ProductContext";
 import LoadingOverlay from "../../Component/LodingOverlay.jsx";
-import SearchComponet from "../component/Searchcomponent.jsx";
+import SearchComponet from "../component/SearchComponent.jsx";
 import ProductFeaturedComponent from "../component/ProductFeaturedComponent.jsx";
 import { useNavigate } from "react-router-dom";
 
