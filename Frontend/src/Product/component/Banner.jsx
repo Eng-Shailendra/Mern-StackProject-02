@@ -47,7 +47,7 @@ const Banner = ({
           <div className="w-full md:w-1/2 flex justify-center md:justify-end">
             <div className="hidden md:block w-72 sm:w-96 lg:w-[420px] rounded-2xl overflow-hidden shadow-2xl">
               <img
-                src={"Public/assets/Banner.png"}
+                src={banner}
                 alt="Banner preview"
                 className="w-full h-full object-cover transform hover:scale-105 transition"
               />
