@@ -2,6 +2,7 @@ import React from "react";
 import { FiMail, FiPhone } from "react-icons/fi";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { FaTwitter, FaFacebookF, FaInstagram } from "react-icons/fa";
+import logo from "../../Public/assets/logo.png";
 
 const Frooter = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Frooter = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <img
-              src="/assets/logo.png"
+              src={logo}
               className="bg-gray-50 w-50"
               onClick={handleLogoClick}
               alt=""

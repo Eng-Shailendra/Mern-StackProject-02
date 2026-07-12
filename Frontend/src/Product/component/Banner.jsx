@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import banner from "../../../Public/assets/Banner.png";
 
 const Banner = ({
   title = "Discover Amazing Products",

@@ -9,6 +9,7 @@ import LoadingOverlay from "../../Component/LodingOverlay.jsx";
 import SearchComponet from "../component/SearchComponent.jsx";
 import ProductFeaturedComponent from "../component/ProductFeaturedComponent.jsx";
 import { useNavigate } from "react-router-dom";
+import image from "../../../Public/assets/Banner.png";
 
 const categories = ["All", "POPULAR"];
 
@@ -41,7 +42,7 @@ const ProductPage = () => {
           <section className="md:col-span-4 md:row-span-4 space-y-8">
             {/* Banner */}
             <div className="overflow-hidden rounded-3xl shadow-lg">
-              <Banner image={"Public/assets/Banner.png"} />
+              <Banner image={image} />
             </div>
 
             {/* Featured Products */}
