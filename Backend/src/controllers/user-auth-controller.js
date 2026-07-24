@@ -147,12 +147,12 @@ export async function loginUser(req, res) {
         return res.cookie("accessToken", accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
             maxAge: 5 * 24 * 60 * 60 * 1000 // 5 day
         }).cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            sameSite: "none",
             maxAge: 10 * 24 * 60 * 60 * 1000 // 10 day
         })
             .status(200).json({
